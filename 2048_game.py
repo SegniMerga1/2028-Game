@@ -228,6 +228,16 @@ def main():
     clear_screen()
     print("Welcome to 2048!")
     print("Combine tiles with the same number to reach 2048.")
+    print("Do you want to play? (Y/N)")
+    while True:
+        choice = get_input_key()
+        if choice is None:
+            continue
+        if choice in ("Y", "N"):
+            break
+    if choice == "N":
+        print("Maybe next time!")
+        return
     print("Press any key to start...")
     get_input_key()
 
