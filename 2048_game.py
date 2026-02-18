@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 
 GRID_SIZE = 4
 NEW_TILE_VALUES = [2, 2, 2, 4]
@@ -26,6 +27,9 @@ DEFAULT_TILE_COLOR = "\x1b[38;5;111m"
 PROMPT_COLOR = "\x1b[38;5;45m"
 BACKGROUND_COLOR = "\x1b[48;5;17m"
 HEADER_COLOR = "\x1b[38;5;226m"
+
+ANIM_STEPS = 3
+ANIM_DELAY = 0.07
 
 
 def clear_screen():
@@ -222,6 +226,65 @@ MOVE_MAP = {
     "S": move_down,
 }
 
+DIRECTION_MAP = {
+    "LEFT": "LEFT",
+    "RIGHT": "RIGHT",
+    "UP": "UP",
+    "DOWN": "DOWN",
+    "A": "LEFT",
+    "D": "RIGHT",
+    "W": "UP",
+    "S": "DOWN",
+}
+
+
+def slide_step(grid, direction):
+    new_grid = [row[:] for row in grid]
+    moved = False
+
+    if direction == "LEFT":
+        for r in range(GRID_SIZE):
+            for c in range(1, GRID_SIZE):
+                # Move each tile at most one cell per frame.
+                if new_grid[r][c] != 0 and new_grid[r][c - 1] == 0:
+                    new_grid[r][c - 1] = new_grid[r][c]
+                    new_grid[r][c] = 0
+                    moved = True
+    elif direction == "RIGHT":
+        for r in range(GRID_SIZE):
+            for c in range(GRID_SIZE - 2, -1, -1):
+                if new_grid[r][c] != 0 and new_grid[r][c + 1] == 0:
+                    new_grid[r][c + 1] = new_grid[r][c]
+                    new_grid[r][c] = 0
+                    moved = True
+    elif direction == "UP":
+        for c in range(GRID_SIZE):
+            for r in range(1, GRID_SIZE):
+                if new_grid[r][c] != 0 and new_grid[r - 1][c] == 0:
+                    new_grid[r - 1][c] = new_grid[r][c]
+                    new_grid[r][c] = 0
+                    moved = True
+    elif direction == "DOWN":
+        for c in range(GRID_SIZE):
+            for r in range(GRID_SIZE - 2, -1, -1):
+                if new_grid[r][c] != 0 and new_grid[r + 1][c] == 0:
+                    new_grid[r + 1][c] = new_grid[r][c]
+                    new_grid[r][c] = 0
+                    moved = True
+
+    return new_grid, moved
+
+
+def animate_slide(grid, score, direction):
+    current = [row[:] for row in grid]
+    for _ in range(ANIM_STEPS):
+        next_grid, moved = slide_step(current, direction)
+        if not moved:
+            break
+        display_grid(next_grid, score)
+        time.sleep(ANIM_DELAY)
+        current = next_grid
+
 
 def main():
     enable_ansi_colors()
@@ -278,6 +341,7 @@ def main():
 
         new_grid, moved, score_gain = MOVE_MAP[key](grid)
         if moved:
+            animate_slide(grid, score, DIRECTION_MAP[key])
             grid = new_grid
             score += score_gain
             add_new_tile(grid)
