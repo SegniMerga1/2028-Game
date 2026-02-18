@@ -4,7 +4,7 @@ import sys
 import time
 
 GRID_SIZE = 4
-NEW_TILE_VALUES = [2, 2, 2, 4]
+NEW_TILE_VALUES = [2, 4, 8, 16, 32]
 
 ANSI_RESET = "\x1b[0m"
 ANSI_BOLD = "\x1b[1m"
