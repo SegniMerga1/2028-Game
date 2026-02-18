@@ -24,6 +24,8 @@ COLOR_MAP = {
 }
 DEFAULT_TILE_COLOR = "\x1b[38;5;111m"
 PROMPT_COLOR = "\x1b[38;5;45m"
+BACKGROUND_COLOR = "\x1b[48;5;17m"
+HEADER_COLOR = "\x1b[38;5;226m"
 
 
 def clear_screen():
@@ -79,8 +81,8 @@ def format_cell(value, width):
 def display_grid(grid, score):
     clear_screen()
     total_sum = sum(sum(row) for row in grid)
-    print("2048 - Console Version")
-    print(f"Score: {score} | Sum: {total_sum}")
+    print(f"{BACKGROUND_COLOR}{HEADER_COLOR}2048 - Console Version{ANSI_RESET}")
+    print(f"{BACKGROUND_COLOR}{HEADER_COLOR}Score: {score} | Sum: {total_sum}{ANSI_RESET}")
     print()
 
     max_value = max(max(row) for row in grid)
@@ -88,10 +90,10 @@ def display_grid(grid, score):
 
     horizontal_line = "+" + "+".join(["-" * cell_width] * GRID_SIZE) + "+"
     for row in grid:
-        print(horizontal_line)
+        print(f"{BACKGROUND_COLOR}{horizontal_line}{ANSI_RESET}")
         row_values = "|" + "|".join(format_cell(value, cell_width) for value in row) + "|"
-        print(row_values)
-    print(horizontal_line)
+        print(f"{BACKGROUND_COLOR}{row_values}{ANSI_RESET}")
+    print(f"{BACKGROUND_COLOR}{horizontal_line}{ANSI_RESET}")
     print()
     print("Controls: W/A/S/D or Arrow Keys (WASD for fallback), Q to quit")
 
