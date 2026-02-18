@@ -325,6 +325,9 @@ def main():
         display_grid(grid, score)
         if not can_move(grid):
             print("Game over! No more moves available.")
+            print("========================")
+            print("||   THANKS FOR PLAY  ||")
+            print("========================")
             print(f"{PROMPT_COLOR}Play again? (Y/N){ANSI_RESET}")
             while True:
                 choice = get_input_key()
