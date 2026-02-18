@@ -5,12 +5,48 @@ import sys
 GRID_SIZE = 4
 NEW_TILE_VALUES = [2, 2, 2, 4]
 
+ANSI_RESET = "\x1b[0m"
+ANSI_BOLD = "\x1b[1m"
+ANSI_DIM = "\x1b[2m"
+
+COLOR_MAP = {
+    2: "\x1b[38;5;230m",
+    4: "\x1b[38;5;223m",
+    8: "\x1b[38;5;215m",
+    16: "\x1b[38;5;208m",
+    32: "\x1b[38;5;203m",
+    64: "\x1b[38;5;196m",
+    128: "\x1b[38;5;135m",
+    256: "\x1b[38;5;129m",
+    512: "\x1b[38;5;93m",
+    1024: "\x1b[38;5;99m",
+    2048: "\x1b[38;5;105m",
+}
+DEFAULT_TILE_COLOR = "\x1b[38;5;111m"
+
 
 def clear_screen():
     if os.name == "nt":
         os.system("cls")
     else:
         os.system("clear")
+
+
+def enable_ansi_colors():
+    if os.name != "nt":
+        return
+    try:
+        import ctypes
+
+        kernel32 = ctypes.windll.kernel32
+        handle = kernel32.GetStdHandle(-11)
+        mode = ctypes.c_uint32()
+        if kernel32.GetConsoleMode(handle, ctypes.byref(mode)) == 0:
+            return
+        ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
+        kernel32.SetConsoleMode(handle, mode.value | ENABLE_VIRTUAL_TERMINAL_PROCESSING)
+    except Exception:
+        pass
 
 
 def init_grid():
@@ -31,8 +67,12 @@ def add_new_tile(grid):
 
 def format_cell(value, width):
     if value == 0:
-        return ".".rjust(width)
-    return str(value).rjust(width)
+        padded = ".".rjust(width)
+        return f"{ANSI_DIM}{padded}{ANSI_RESET}"
+
+    color = COLOR_MAP.get(value, DEFAULT_TILE_COLOR)
+    padded = str(value).rjust(width)
+    return f"{ANSI_BOLD}{color}{padded}{ANSI_RESET}"
 
 
 def display_grid(grid, score):
@@ -180,6 +220,7 @@ MOVE_MAP = {
 
 
 def main():
+    enable_ansi_colors()
     grid = init_grid()
     score = 0
 
