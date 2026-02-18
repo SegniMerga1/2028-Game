@@ -23,6 +23,7 @@ COLOR_MAP = {
     2048: "\x1b[38;5;105m",
 }
 DEFAULT_TILE_COLOR = "\x1b[38;5;111m"
+PROMPT_COLOR = "\x1b[38;5;45m"
 
 
 def clear_screen():
@@ -245,14 +246,31 @@ def main():
         display_grid(grid, score)
         if not can_move(grid):
             print("Game over! No more moves available.")
-            break
+            print(f"{PROMPT_COLOR}Do you want to quit? (Y/N){ANSI_RESET}")
+            while True:
+                choice = get_input_key()
+                if choice in ("Y", "N"):
+                    break
+            if choice == "Y":
+                print("Thanks for playing!")
+                break
+            grid = init_grid()
+            score = 0
+            continue
 
         key = get_input_key()
         if key is None:
             continue
         if key in ("Q", "\x03"):
-            print("Thanks for playing!")
-            break
+            print(f"{PROMPT_COLOR}Do you want to quit? (Y/N){ANSI_RESET}")
+            while True:
+                choice = get_input_key()
+                if choice in ("Y", "N"):
+                    break
+            if choice == "Y":
+                print("Thanks for playing!")
+                break
+            continue
         if key not in MOVE_MAP:
             continue
 
