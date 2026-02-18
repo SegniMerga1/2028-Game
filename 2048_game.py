@@ -225,6 +225,12 @@ def main():
     grid = init_grid()
     score = 0
 
+    clear_screen()
+    print("Welcome to 2048!")
+    print("Combine tiles with the same number to reach 2048.")
+    print("Press any key to start...")
+    get_input_key()
+
     while True:
         display_grid(grid, score)
         if not can_move(grid):
