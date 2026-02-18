@@ -31,6 +31,8 @@ HEADER_COLOR = "\x1b[38;5;226m"
 ANIM_STEPS = 3
 ANIM_DELAY = 0.07
 
+SOUND_ENABLED = True
+
 
 def clear_screen():
     if os.name == "nt":
@@ -177,6 +179,7 @@ def can_move(grid):
 
 if os.name == "nt":
     import msvcrt
+    import winsound
 
     def get_input_key():
         key = msvcrt.getch()
@@ -213,6 +216,16 @@ else:
             return key.upper()
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+
+def play_move_sound():
+    if not SOUND_ENABLED:
+        return
+    if os.name == "nt":
+        winsound.Beep(800, 40)
+    else:
+        sys.stdout.write("\a")
+        sys.stdout.flush()
 
 
 MOVE_MAP = {
@@ -287,6 +300,7 @@ def animate_slide(grid, score, direction):
 
 
 def main():
+    global SOUND_ENABLED
     enable_ansi_colors()
     grid = init_grid()
     score = 0
@@ -337,6 +351,9 @@ def main():
                 break
             continue
         if key not in MOVE_MAP:
+            if key == "M":
+                SOUND_ENABLED = not SOUND_ENABLED
+            continue
             continue
 
         new_grid, moved, score_gain = MOVE_MAP[key](grid)
@@ -345,6 +362,7 @@ def main():
             grid = new_grid
             score += score_gain
             add_new_tile(grid)
+            play_move_sound()
 
 
 if __name__ == "__main__":
