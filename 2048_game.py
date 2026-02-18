@@ -248,17 +248,17 @@ def main():
         display_grid(grid, score)
         if not can_move(grid):
             print("Game over! No more moves available.")
-            print(f"{PROMPT_COLOR}Do you want to quit? (Y/N){ANSI_RESET}")
+            print(f"{PROMPT_COLOR}Play again? (Y/N){ANSI_RESET}")
             while True:
                 choice = get_input_key()
                 if choice in ("Y", "N"):
                     break
             if choice == "Y":
-                print("Thanks for playing!")
-                break
-            grid = init_grid()
-            score = 0
-            continue
+                grid = init_grid()
+                score = 0
+                continue
+            print("Thanks for playing!")
+            break
 
         key = get_input_key()
         if key is None:
