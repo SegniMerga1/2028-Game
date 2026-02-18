@@ -84,7 +84,7 @@ def display_grid(grid, score):
     print()
 
     max_value = max(max(row) for row in grid)
-    cell_width = max(4, len(str(max_value)) + 1)
+    cell_width = max(6, len(str(max_value)) + 2)
 
     horizontal_line = "+" + "+".join(["-" * cell_width] * GRID_SIZE) + "+"
     for row in grid:
