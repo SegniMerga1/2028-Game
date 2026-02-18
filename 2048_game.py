@@ -77,8 +77,9 @@ def format_cell(value, width):
 
 def display_grid(grid, score):
     clear_screen()
+    total_sum = sum(sum(row) for row in grid)
     print("2048 - Console Version")
-    print(f"Score: {score}")
+    print(f"Score: {score} | Sum: {total_sum}")
     print()
 
     max_value = max(max(row) for row in grid)
