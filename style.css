@@ -1,0 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;600;700&display=swap");
+
+:root {
+  --bg-1: #0b1320;
+  --bg-2: #1b2440;
+  --accent: #56f0e0;
+  --accent-2: #f7b267;
+  --tile-bg: rgba(255, 255, 255, 0.08);
+  --tile-border: rgba(255, 255, 255, 0.15);
+  --shadow: 0 20px 60px rgba(5, 10, 30, 0.6);
+}
