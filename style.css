@@ -141,3 +141,11 @@ h1 {
   font-size: 14px;
   color: #cbd0ff;
 }
+
+kbd {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 12px;
+}
