@@ -87,3 +87,10 @@ h1 {
   letter-spacing: 2px;
   color: #9fb0ff;
 }
+
+.stat .value {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 4px;
+}
