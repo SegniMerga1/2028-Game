@@ -160,3 +160,11 @@ kbd {
   cursor: pointer;
   box-shadow: 0 10px 20px rgba(86, 240, 224, 0.25);
 }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 10, 20, 0.75);
+  display: grid;
+  place-items: center;
+}
