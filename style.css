@@ -168,3 +168,13 @@ kbd {
   display: grid;
   place-items: center;
 }
+
+.overlay-card {
+  background: rgba(10, 15, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 24px 32px;
+  text-align: center;
+  min-width: 260px;
+  box-shadow: var(--shadow);
+}
