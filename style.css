@@ -66,3 +66,8 @@ h1 {
   color: var(--accent);
   font-size: 12px;
 }
+
+.stats {
+  display: flex;
+  gap: 12px;
+}
