@@ -121,3 +121,15 @@ h1 {
   color: #fefefe;
   transition: transform 120ms ease, background 120ms ease;
 }
+
+.tile.spawn {
+  animation: pop 180ms ease;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
