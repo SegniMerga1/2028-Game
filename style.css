@@ -24,3 +24,14 @@ body {
   place-items: center;
   padding: 24px;
 }
+
+.shell {
+  width: min(880px, 95vw);
+  background: linear-gradient(145deg, rgba(25, 35, 70, 0.9), rgba(10, 15, 30, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
