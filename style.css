@@ -44,3 +44,10 @@ body {
     radial-gradient(circle at 80% 10%, rgba(247, 178, 103, 0.15), transparent 35%);
   pointer-events: none;
 }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
