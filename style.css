@@ -108,3 +108,16 @@ h1 {
   grid-template-columns: repeat(4, minmax(60px, 1fr));
   gap: 14px;
 }
+
+.tile {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: clamp(20px, 4vw, 32px);
+  font-weight: 700;
+  background: var(--tile-bg);
+  border: 1px solid var(--tile-border);
+  color: #fefefe;
+  transition: transform 120ms ease, background 120ms ease;
+}
