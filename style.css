@@ -133,3 +133,11 @@ h1 {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #cbd0ff;
+}
