@@ -51,3 +51,10 @@ body {
   justify-content: space-between;
   gap: 20px;
 }
+
+h1 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(48px, 6vw, 72px);
+  margin: 0;
+  letter-spacing: 2px;
+}
