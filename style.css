@@ -71,3 +71,12 @@ h1 {
   display: flex;
   gap: 12px;
 }
+
+.stat {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 16px;
+  border-radius: 16px;
+  min-width: 110px;
+  text-align: center;
+}
