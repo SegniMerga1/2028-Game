@@ -35,3 +35,12 @@ body {
   position: relative;
   overflow: hidden;
 }
+
+.shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(86, 240, 224, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(247, 178, 103, 0.15), transparent 35%);
+  pointer-events: none;
+}
