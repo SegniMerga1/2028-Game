@@ -193,3 +193,8 @@ kbd {
     transform: scale(1);
   }
 }
+
+@media (max-width: 680px) {
+  .shell {
+    padding: 18px;
+  }
