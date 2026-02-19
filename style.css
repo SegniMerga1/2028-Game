@@ -178,3 +178,9 @@ kbd {
   min-width: 260px;
   box-shadow: var(--shadow);
 }
+
+.overlay-card h2 {
+  margin: 0 0 8px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 36px;
+}
