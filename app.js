@@ -196,7 +196,7 @@ function handleMove(direction) {
   }
 
   if (!canMove()) {
-    overlayEl.hidden = false;
+    initGame();
   }
 }
 
