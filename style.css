@@ -134,6 +134,12 @@ h1 {
   flex-wrap: wrap;
 }
 
+.footer-meta {
+  font-size: 12px;
+  color: #9fb0ff;
+  letter-spacing: 1px;
+}
+
 .controls {
   display: flex;
   align-items: center;
