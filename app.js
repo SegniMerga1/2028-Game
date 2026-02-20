@@ -35,6 +35,7 @@ function initGame() {
   grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
   score = 0;
   overlayEl.hidden = true;
+  overlayEl.style.display = "none";
   for (let i = 0; i < startTiles; i += 1) {
     addTile();
   }
