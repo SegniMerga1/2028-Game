@@ -28,6 +28,10 @@ const tileColors = {
 };
 
 function initGame() {
+  if (!gridEl || !scoreEl || !bestEl || !overlayEl || !restartBtn || !playAgainBtn) {
+    // Basic guard if the DOM is not ready or elements are missing.
+    return;
+  }
   grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
   score = 0;
   overlayEl.hidden = true;
@@ -196,20 +200,27 @@ function handleMove(direction) {
   }
 }
 
-window.addEventListener("keydown", (event) => {
-  const key = event.key.toLowerCase();
-  if (["arrowup", "w"].includes(key)) {
+function handleKey(event) {
+  const key = (event.key || "").toLowerCase();
+  const code = (event.code || "").toLowerCase();
+  if (["arrowup", "w", "keyw"].includes(key) || ["arrowup", "keyw"].includes(code)) {
+    event.preventDefault();
     handleMove("up");
-  } else if (["arrowdown", "s"].includes(key)) {
+  } else if (["arrowdown", "s", "keys"].includes(key) || ["arrowdown", "keys"].includes(code)) {
+    event.preventDefault();
     handleMove("down");
-  } else if (["arrowleft", "a"].includes(key)) {
+  } else if (["arrowleft", "a", "keya"].includes(key) || ["arrowleft", "keya"].includes(code)) {
+    event.preventDefault();
     handleMove("left");
-  } else if (["arrowright", "d"].includes(key)) {
+  } else if (["arrowright", "d", "keyd"].includes(key) || ["arrowright", "keyd"].includes(code)) {
+    event.preventDefault();
     handleMove("right");
   }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initGame();
+  window.addEventListener("keydown", handleKey);
+  restartBtn.addEventListener("click", initGame);
+  playAgainBtn.addEventListener("click", initGame);
 });
-
-restartBtn.addEventListener("click", initGame);
-playAgainBtn.addEventListener("click", initGame);
-
-initGame();
