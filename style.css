@@ -20,6 +20,33 @@ body[data-theme="sunrise"] {
   --tile-border: rgba(255, 255, 255, 0.2);
 }
 
+body[data-theme="ocean"] {
+  --bg-1: #071a2b;
+  --bg-2: #0d2f4a;
+  --accent: #5ee7ff;
+  --accent-2: #78ffd6;
+  --tile-bg: rgba(94, 231, 255, 0.12);
+  --tile-border: rgba(120, 255, 214, 0.2);
+}
+
+body[data-theme="sand"] {
+  --bg-1: #2b1d0f;
+  --bg-2: #4a341d;
+  --accent: #ffcf6b;
+  --accent-2: #f7b267;
+  --tile-bg: rgba(255, 207, 107, 0.14);
+  --tile-border: rgba(255, 178, 103, 0.25);
+}
+
+body[data-theme="forest"] {
+  --bg-1: #0b1f14;
+  --bg-2: #133629;
+  --accent: #68f2a4;
+  --accent-2: #7adf7a;
+  --tile-bg: rgba(104, 242, 164, 0.12);
+  --tile-border: rgba(122, 223, 122, 0.24);
+}
+
 * {
   box-sizing: border-box;
 }
