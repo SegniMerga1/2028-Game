@@ -231,6 +231,18 @@ kbd {
   animation: bannerGlow 900ms ease;
 }
 
+.record-banner {
+  margin: 10px 0 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(120, 255, 214, 0.25), rgba(86, 240, 224, 0.15));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fefefe;
+  font-weight: 600;
+  text-align: center;
+  animation: bannerGlow 900ms ease;
+}
+
 .settings {
   position: absolute;
   inset: 0;
