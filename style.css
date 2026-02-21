@@ -8,6 +8,16 @@
   --tile-bg: rgba(255, 255, 255, 0.08);
   --tile-border: rgba(255, 255, 255, 0.15);
   --shadow: 0 20px 60px rgba(5, 10, 30, 0.6);
+  --anim-speed: 120ms;
+}
+
+body[data-theme="sunrise"] {
+  --bg-1: #2b0f2d;
+  --bg-2: #4d1c3a;
+  --accent: #ffb86b;
+  --accent-2: #ff6b9a;
+  --tile-bg: rgba(255, 255, 255, 0.12);
+  --tile-border: rgba(255, 255, 255, 0.2);
 }
 
 * {
