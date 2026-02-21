@@ -8,10 +8,32 @@ const bestEl = document.getElementById("best");
 const overlayEl = document.getElementById("overlay");
 const restartBtn = document.getElementById("restart");
 const playAgainBtn = document.getElementById("play-again");
+const winBannerEl = document.getElementById("win-banner");
+const settingsEl = document.getElementById("settings");
+const settingsToggleBtn = document.getElementById("settings-toggle");
+const settingsCloseBtn = document.getElementById("settings-close");
+const settingSoundEl = document.getElementById("setting-sound");
+const settingAnimationsEl = document.getElementById("setting-animations");
+const settingSwipeEl = document.getElementById("setting-swipe");
+const settingSpeedEl = document.getElementById("setting-speed");
+const settingThemeEl = document.getElementById("setting-theme");
 
 let grid = [];
 let score = 0;
 let best = 0;
+let winShown = false;
+
+const SETTINGS_KEY = "neon2048-settings";
+const BEST_KEY = "neon2048-best";
+const defaultSettings = {
+  sound: true,
+  animations: true,
+  swipe: true,
+  speed: 120,
+  theme: "neon",
+};
+let settings = { ...defaultSettings };
+let audioContext;
 
 const tileColors = {
   2: "#f5f5f5",
@@ -34,12 +56,101 @@ function initGame() {
   }
   grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
   score = 0;
+  winShown = false;
   overlayEl.hidden = true;
   overlayEl.style.display = "none";
+  if (winBannerEl) {
+    winBannerEl.hidden = true;
+  }
   for (let i = 0; i < startTiles; i += 1) {
     addTile();
   }
   render();
+}
+
+function loadSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+    if (saved) {
+      settings = { ...defaultSettings, ...saved };
+    }
+  } catch (error) {
+    settings = { ...defaultSettings };
+  }
+}
+
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+function loadBest() {
+  const stored = Number(localStorage.getItem(BEST_KEY));
+  best = Number.isFinite(stored) ? stored : 0;
+}
+
+function saveBest() {
+  localStorage.setItem(BEST_KEY, String(best));
+}
+
+function applySettings() {
+  document.body.dataset.theme = settings.theme;
+  const speed = settings.animations ? settings.speed : 0;
+  document.documentElement.style.setProperty("--anim-speed", `${speed}ms`);
+  if (settingSoundEl) {
+    settingSoundEl.checked = settings.sound;
+  }
+  if (settingAnimationsEl) {
+    settingAnimationsEl.checked = settings.animations;
+  }
+  if (settingSwipeEl) {
+    settingSwipeEl.checked = settings.swipe;
+  }
+  if (settingSpeedEl) {
+    settingSpeedEl.value = String(settings.speed);
+  }
+  if (settingThemeEl) {
+    settingThemeEl.value = settings.theme;
+  }
+}
+
+function toggleSettings(show) {
+  if (!settingsEl) {
+    return;
+  }
+  settingsEl.hidden = !show;
+}
+
+function playMoveSound() {
+  if (!settings.sound) {
+    return;
+  }
+  try {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    osc.type = "triangle";
+    osc.frequency.value = 620;
+    gain.gain.value = 0.05;
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+    osc.start();
+    osc.stop(audioContext.currentTime + 0.06);
+  } catch (error) {
+    // Ignore audio errors to keep the game responsive.
+  }
+}
+
+function showWinBanner() {
+  if (!winBannerEl || winShown) {
+    return;
+  }
+  winShown = true;
+  winBannerEl.hidden = false;
+  setTimeout(() => {
+    winBannerEl.hidden = true;
+  }, 2500);
 }
 
 function addTile() {
@@ -68,7 +179,9 @@ function render() {
         tile.textContent = value;
         tile.style.background = tileColors[value] || "#38bdf8";
         tile.style.color = value >= 128 ? "#0f172a" : "#0a0a0a";
-        tile.classList.add("spawn");
+        if (settings.animations) {
+          tile.classList.add("spawn");
+        }
       }
       gridEl.appendChild(tile);
     });
@@ -76,6 +189,7 @@ function render() {
   scoreEl.textContent = score;
   best = Math.max(best, score);
   bestEl.textContent = best;
+  saveBest();
 }
 
 function compress(row) {
@@ -181,6 +295,7 @@ function handleMove(direction) {
     score += gained;
     addTile();
     render();
+    playMoveSound();
   } else {
     const rotated = rotateGrid(direction);
     const original = grid;
@@ -194,6 +309,11 @@ function handleMove(direction) {
     setGrid(newGrid, direction);
     addTile();
     render();
+    playMoveSound();
+  }
+
+  if (grid.some((row) => row.some((value) => value >= 2048))) {
+    showWinBanner();
   }
 
   if (!canMove()) {
@@ -220,8 +340,81 @@ function handleKey(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadSettings();
+  loadBest();
+  applySettings();
   initGame();
   window.addEventListener("keydown", handleKey);
   restartBtn.addEventListener("click", initGame);
   playAgainBtn.addEventListener("click", initGame);
+
+  if (settingsToggleBtn) {
+    settingsToggleBtn.addEventListener("click", () => toggleSettings(true));
+  }
+  if (settingsCloseBtn) {
+    settingsCloseBtn.addEventListener("click", () => toggleSettings(false));
+  }
+  if (settingSoundEl) {
+    settingSoundEl.addEventListener("change", (event) => {
+      settings.sound = event.target.checked;
+      saveSettings();
+    });
+  }
+  if (settingAnimationsEl) {
+    settingAnimationsEl.addEventListener("change", (event) => {
+      settings.animations = event.target.checked;
+      applySettings();
+      saveSettings();
+      render();
+    });
+  }
+  if (settingSwipeEl) {
+    settingSwipeEl.addEventListener("change", (event) => {
+      settings.swipe = event.target.checked;
+      saveSettings();
+    });
+  }
+  if (settingSpeedEl) {
+    settingSpeedEl.addEventListener("input", (event) => {
+      settings.speed = Number(event.target.value);
+      applySettings();
+      saveSettings();
+    });
+  }
+  if (settingThemeEl) {
+    settingThemeEl.addEventListener("change", (event) => {
+      settings.theme = event.target.value;
+      applySettings();
+      saveSettings();
+    });
+  }
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  gridEl.addEventListener("touchstart", (event) => {
+    if (!settings.swipe) {
+      return;
+    }
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+  });
+  gridEl.addEventListener("touchend", (event) => {
+    if (!settings.swipe) {
+      return;
+    }
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+    if (Math.max(absX, absY) < 30) {
+      return;
+    }
+    if (absX > absY) {
+      handleMove(deltaX > 0 ? "right" : "left");
+    } else {
+      handleMove(deltaY > 0 ? "down" : "up");
+    }
+  });
 });
