@@ -9,6 +9,7 @@ const overlayEl = document.getElementById("overlay");
 const restartBtn = document.getElementById("restart");
 const playAgainBtn = document.getElementById("play-again");
 const winBannerEl = document.getElementById("win-banner");
+const recordBannerEl = document.getElementById("record-banner");
 const settingsEl = document.getElementById("settings");
 const settingsToggleBtn = document.getElementById("settings-toggle");
 const settingsCloseBtn = document.getElementById("settings-close");
@@ -61,6 +62,9 @@ function initGame() {
   overlayEl.style.display = "none";
   if (winBannerEl) {
     winBannerEl.hidden = true;
+  }
+  if (recordBannerEl) {
+    recordBannerEl.hidden = true;
   }
   for (let i = 0; i < startTiles; i += 1) {
     addTile();
@@ -153,6 +157,17 @@ function showWinBanner() {
   }, 2500);
 }
 
+function showRecordBanner(value) {
+  if (!recordBannerEl) {
+    return;
+  }
+  recordBannerEl.textContent = `New record: ${value}`;
+  recordBannerEl.hidden = false;
+  setTimeout(() => {
+    recordBannerEl.hidden = true;
+  }, 2200);
+}
+
 function addTile() {
   const empty = [];
   grid.forEach((row, r) => {
@@ -187,9 +202,13 @@ function render() {
     });
   });
   scoreEl.textContent = score;
+  const previousBest = best;
   best = Math.max(best, score);
   bestEl.textContent = best;
   saveBest();
+  if (best > previousBest) {
+    showRecordBanner(best);
+  }
 }
 
 function compress(row) {
