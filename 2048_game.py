@@ -30,8 +30,10 @@ HEADER_COLOR = "\x1b[38;5;226m"
 
 ANIM_STEPS = 3
 ANIM_DELAY = 0.07
+ANIM_SPEEDS = [0.04, 0.07, 0.12]
 
 SOUND_ENABLED = True
+BEST_SCORE_FILE = os.path.join(os.path.dirname(__file__), "best_score.txt")
 
 
 def clear_screen():
@@ -88,7 +90,9 @@ def display_grid(grid, score):
     clear_screen()
     total_sum = sum(sum(row) for row in grid)
     print(f"{BACKGROUND_COLOR}{HEADER_COLOR}2048 - Console Version{ANSI_RESET}")
-    print(f"{BACKGROUND_COLOR}{HEADER_COLOR}Score: {score} | Sum: {total_sum}{ANSI_RESET}")
+    print(
+        f"{BACKGROUND_COLOR}{HEADER_COLOR}Score: {score} | Best: {BEST_SCORE} | Sum: {total_sum}{ANSI_RESET}"
+    )
     print()
 
     max_value = max(max(row) for row in grid)
@@ -101,7 +105,7 @@ def display_grid(grid, score):
         print(f"{BACKGROUND_COLOR}{row_values}{ANSI_RESET}")
     print(f"{BACKGROUND_COLOR}{horizontal_line}{ANSI_RESET}")
     print()
-    print("Controls: W/A/S/D or Arrow Keys (WASD for fallback), Q to quit")
+    print("Controls: W/A/S/D or Arrow Keys, Q to quit, M mute, T speed")
 
 
 
@@ -228,6 +232,30 @@ def play_move_sound():
         sys.stdout.flush()
 
 
+def load_best_score():
+    if not os.path.exists(BEST_SCORE_FILE):
+        return 0
+    try:
+        with open(BEST_SCORE_FILE, "r", encoding="utf-8") as handle:
+            return int(handle.read().strip() or 0)
+    except (ValueError, OSError):
+        return 0
+
+
+def save_best_score(value):
+    try:
+        with open(BEST_SCORE_FILE, "w", encoding="utf-8") as handle:
+            handle.write(str(value))
+    except OSError:
+        pass
+
+
+def cycle_animation_speed():
+    global ANIM_DELAY
+    index = ANIM_SPEEDS.index(ANIM_DELAY) if ANIM_DELAY in ANIM_SPEEDS else 0
+    ANIM_DELAY = ANIM_SPEEDS[(index + 1) % len(ANIM_SPEEDS)]
+
+
 MOVE_MAP = {
     "LEFT": move_left,
     "RIGHT": move_right,
@@ -301,9 +329,12 @@ def animate_slide(grid, score, direction):
 
 def main():
     global SOUND_ENABLED
+    global BEST_SCORE
     enable_ansi_colors()
     grid = init_grid()
     score = 0
+    win_shown = False
+    BEST_SCORE = load_best_score()
 
     clear_screen()
     print("Welcome to 2048!")
@@ -356,7 +387,8 @@ def main():
         if key not in MOVE_MAP:
             if key == "M":
                 SOUND_ENABLED = not SOUND_ENABLED
-            continue
+            if key == "T":
+                cycle_animation_speed()
             continue
 
         new_grid, moved, score_gain = MOVE_MAP[key](grid)
@@ -366,6 +398,13 @@ def main():
             score += score_gain
             add_new_tile(grid)
             play_move_sound()
+            if score > BEST_SCORE:
+                BEST_SCORE = score
+                save_best_score(BEST_SCORE)
+            if not win_shown and any(value >= 2048 for row in grid for value in row):
+                win_shown = True
+                print(f"{PROMPT_COLOR}You reached 2048! Keep going!{ANSI_RESET}")
+                time.sleep(1)
 
 
 if __name__ == "__main__":
