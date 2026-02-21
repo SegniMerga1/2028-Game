@@ -25,6 +25,10 @@
         </div>
       </header>
 
+      <div id="win-banner" class="win-banner" hidden>
+        2048 reached! Keep going for a higher score.
+      </div>
+
       <section class="board-wrap">
         <div id="grid" class="grid" aria-live="polite"></div>
       </section>
@@ -37,8 +41,45 @@
           <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>
         </div>
         <div class="footer-meta">© 2026 Created by Segni</div>
-        <button id="restart" class="restart">Restart</button>
+        <div class="footer-actions">
+          <button id="settings-toggle" class="ghost">Settings</button>
+          <button id="restart" class="restart">Restart</button>
+        </div>
       </footer>
+
+      <section id="settings" class="settings" hidden>
+        <div class="settings-card">
+          <div class="settings-header">
+            <h3>Game Settings</h3>
+            <button id="settings-close" class="ghost">Close</button>
+          </div>
+          <div class="settings-grid">
+            <label class="toggle">
+              <input id="setting-sound" type="checkbox" />
+              <span>Sound on move</span>
+            </label>
+            <label class="toggle">
+              <input id="setting-animations" type="checkbox" />
+              <span>Animations</span>
+            </label>
+            <label class="toggle">
+              <input id="setting-swipe" type="checkbox" />
+              <span>Swipe controls</span>
+            </label>
+            <label class="field">
+              <span>Animation speed</span>
+              <input id="setting-speed" type="range" min="60" max="220" step="20" />
+            </label>
+            <label class="field">
+              <span>Theme</span>
+              <select id="setting-theme">
+                <option value="neon">Neon Drift</option>
+                <option value="sunrise">Sunrise Bloom</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </section>
 
       <div id="overlay" class="overlay" hidden>
         <div class="overlay-card">
