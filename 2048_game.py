@@ -34,6 +34,7 @@ ANIM_SPEEDS = [0.04, 0.07, 0.12]
 
 SOUND_ENABLED = True
 BEST_SCORE_FILE = os.path.join(os.path.dirname(__file__), "best_score.txt")
+BEST_SCORE = 0
 
 
 def clear_screen():
