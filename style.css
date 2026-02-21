@@ -129,7 +129,7 @@ h1 {
   background: var(--tile-bg);
   border: 1px solid var(--tile-border);
   color: #fefefe;
-  transition: transform 120ms ease, background 120ms ease;
+  transition: transform var(--anim-speed) ease, background var(--anim-speed) ease;
 }
 
 .tile.spawn {
