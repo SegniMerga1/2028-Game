@@ -302,6 +302,17 @@ kbd {
   }
 }
 
+@keyframes bannerGlow {
+  0% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 680px) {
   .shell {
     padding: 18px;
